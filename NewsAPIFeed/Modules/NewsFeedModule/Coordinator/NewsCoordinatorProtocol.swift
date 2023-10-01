@@ -9,7 +9,6 @@ import Foundation
 
 protocol NewsCoordinatorProtocol: AnyObject {
     
-    func didOpenDetailNews()
-    func didOpenSafariConroller(withUrl url: URL)
+    func didOpenDetailNews(for index: Int, articles: [Article])
     
 }

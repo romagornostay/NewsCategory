@@ -29,6 +29,15 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = .collectionViewCellBackground
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.red]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.blue]
+        navigationController?.navigationBar.standardAppearance = appearance
+//        navigationController?.navigationBar.compactAppearance = appearance
+//        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        
+        
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         newsCoordinator.start()

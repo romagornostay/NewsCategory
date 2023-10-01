@@ -1,36 +1,39 @@
 //
-//  NewsCoordinator.swift
+//  NewsDetailCoordinator.swift
 //  NewsAPIFeed
 //
-//  Created by Роман Горностаев on 10.09.2023.
+//  Created by Роман Горностаев on 11.09.2023.
 //
 
 import UIKit
 import SafariServices
 
-final class NewsCoordinator: Coordinator {
+protocol NewsDetailCoordinatorProtocol: AnyObject {
+    func didOpenSafariConroller(withUrl url: URL)
+}
+
+final class NewsDetailCoordinator: Coordinator {
     var navigationController: UINavigationController?
+    
     var assemblyBuilder: AssemblyBuilderProtocol?
-//    let newsDetailCoordinator: NewsDetailCoordinator
     
     init(navigationController: UINavigationController?, assemblyBuilder: AssemblyBuilderProtocol?) {
         self.navigationController = navigationController
         self.assemblyBuilder = assemblyBuilder
-//        newsDetailCoordinator = NewsDetailCoordinator(navigationController: navigationController)
     }
     
-    func start() {
+    func start() {}
+        
+    func openDetailViewWith(_ index: Int, articles: [Article]) {
         guard let navigationController,
-              let newsFeedViewController = assemblyBuilder?.createNewsFeed(with: self) else { return }
-        navigationController.viewControllers = [newsFeedViewController]
+              let detailViewController = assemblyBuilder?
+            .createNewsDetail(for: index, articles: articles, coordinator: self) else { return }
+        navigationController.pushViewController(detailViewController, animated: true)
     }
+    
 }
 
-extension NewsCoordinator: NewsCoordinatorProtocol {
-    
-    func didOpenDetailNews() {
-//        newsDetailCoordinator.start()
-    }
+extension NewsDetailCoordinator: NewsDetailCoordinatorProtocol {
     
     func didOpenSafariConroller(withUrl url: URL) {
         let safariViewController = SFSafariViewController(url: url)
@@ -39,4 +42,3 @@ extension NewsCoordinator: NewsCoordinatorProtocol {
     }
     
 }
-

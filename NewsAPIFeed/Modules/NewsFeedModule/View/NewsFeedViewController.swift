@@ -16,5 +16,11 @@ class NewsFeedViewController: UIViewController {
         view = newsFeedView
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        newsFeedView?.didTriggerViewReadyForLoadNews()
+    }
+    
 }
 

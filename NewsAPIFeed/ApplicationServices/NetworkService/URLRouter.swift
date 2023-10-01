@@ -12,22 +12,8 @@ enum URLRouter {
     case everything(key: String)
     case topHeadlines(key: String, category: Category)
     
-    var scheme: String {
-        
-        switch self {
-        case .everything, .topHeadlines: return "https"
-        }
-        
-    }
-    
-    var host: String {
-        
-        switch self {
-        case .everything, .topHeadlines: return "newsapi.org"
-        }
-        
-    }
-    
+    var scheme: String { "https" }
+    var host: String { "newsapi.org" }
     var path: String {
         
         switch self {
@@ -52,13 +38,12 @@ enum URLRouter {
     }
     
     func completed() -> URL? {
-        
         var components = URLComponents()
-        components.scheme = self.scheme
-        components.host = self.host
-        components.path = self.path
-        components.queryItems = self.queryItems
+        components.scheme = scheme
+        components.host = host
+        components.path = path
+        components.queryItems = queryItems
         return components.url
-        
     }
+    
 }

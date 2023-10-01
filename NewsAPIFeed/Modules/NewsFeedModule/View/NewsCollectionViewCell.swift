@@ -25,7 +25,7 @@ class NewsCollectionViewCell: UICollectionViewCell {
     
     private let newsImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.cornerRadius = 8
+        imageView.layer.cornerRadius = Constants.imageCornerRadius
         imageView.layer.masksToBounds = true
         imageView.clipsToBounds = true
         imageView.backgroundColor = .secondarySystemBackground
@@ -35,9 +35,8 @@ class NewsCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(newsTitleLabel)
-        contentView.addSubview(subtitleLabel)
-        contentView.addSubview(newsImageView)
+        
+        addSubviewsForCell()
     }
     
     required init?(coder: NSCoder) {
@@ -60,20 +59,27 @@ class NewsCollectionViewCell: UICollectionViewCell {
         
     }
     
+    private func addSubviewsForCell() {
+        contentView.addSubview(newsTitleLabel)
+        contentView.addSubview(subtitleLabel)
+        contentView.addSubview(newsImageView)
+    }
+    
     private func layoutCollectionViewCell() {
-        newsTitleLabel.frame = CGRect(x: 10,
-                                      y: 10,
-                                      width: contentView.frame.size.width-130,
-                                      height: 50)
-        subtitleLabel.frame = CGRect(x: 10,
-                                     y: 60,
-                                     width: contentView.frame.size.width-130,
-                                     height: contentView.frame.size.height/2)
-        
-        newsImageView.frame = CGRect(x: contentView.frame.size.width-110,
-                                     y: 10,
-                                     width: 100,
-                                     height: contentView.frame.size.height-20)
+        let contentViewSize = contentView.frame.size
+        newsTitleLabel.frame = CGRect(x: Constants.topInset,
+                                      y: Constants.topInset,
+                                      width: contentViewSize.width - contentViewSize.height,
+                                      height: Constants.titleHeiht)
+        subtitleLabel.frame = CGRect(x: Constants.topInset,
+                                     y: newsTitleLabel.frame.maxY,
+                                     width: contentViewSize.width - contentViewSize.height,
+                                     height: contentViewSize.height/2)
+
+        newsImageView.frame = CGRect(x: newsTitleLabel.frame.maxX + Constants.inset,
+                                     y: Constants.topInset,
+                                     width: contentViewSize.height - 2*Constants.topInset,
+                                     height: contentViewSize.height - 2*Constants.topInset)
     }
     
     func configure(with viewModel: NewsViewModel) {
@@ -91,6 +97,22 @@ class NewsCollectionViewCell: UICollectionViewCell {
                 }
             }.resume()
         }
+        
+    }
+    
+}
+
+// MARK: - Constants
+fileprivate extension NewsCollectionViewCell {
+    
+    enum Constants {
+        
+        static let imageCornerRadius: CGFloat = 10
+        static let topInset: CGFloat = 10
+        static let inset: CGFloat = 5
+        
+        static let titleHeiht: CGFloat = 50
+        static let height: CGFloat = 130
         
     }
     
