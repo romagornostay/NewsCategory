@@ -61,7 +61,7 @@ class SkeletonView: UIView {
         group.isRemovedOnCompletion = false
         
         if let previousGroup = previousGroup {
-            // Offset groups by 0.33 seconds for effect
+            /// Offset groups by 0.33 seconds for effect
             group.beginTime = previousGroup.beginTime + 0.33
         }
         

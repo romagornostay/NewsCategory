@@ -78,7 +78,6 @@ fileprivate extension NewsFeedSkeletonCell {
     
     enum Constants {
         
-//        static let topInset: CGFloat = UIDevice.current.isIpad ? 28 : 20
         static let imageCornerRadius: CGFloat = 10
         static let titleCornerRadius: CGFloat = 5
         static let topInset: CGFloat = 12
@@ -86,15 +85,6 @@ fileprivate extension NewsFeedSkeletonCell {
         
         static let titleHeiht: CGFloat = 40
         static let subtitleHeiht: CGFloat = 50
-        static let height: CGFloat = 150
-        static let separatorHeight = 1 / UIScreen.main.scale
-        
-        static let logoTopInset: CGFloat = 1
-       
-        
-        
-        static let logoSize = CGSize(width: 18, height: 18)
-        static let logoCornerRadius: CGFloat = 9
         
     }
     

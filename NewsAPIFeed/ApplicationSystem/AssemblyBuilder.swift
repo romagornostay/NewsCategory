@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SwiftUI
 
 protocol AssemblyBuilderProtocol {
     func createNewsFeed(with coordinator: NewsCoordinatorProtocol) -> UIViewController
@@ -18,12 +17,13 @@ class AssemblyBuilder: AssemblyBuilderProtocol {
     func createNewsFeed(with coordinator: NewsCoordinatorProtocol) -> UIViewController {
         let newsViewController = NewsFeedViewController()
         let dataDisplayManager = NewsFeedDataDisplayManager()
-        let service = NetworkService()
+        let service = NewsService(with: NetworkClient())
         
         let viewModel = NewsFeedViewModel(dataDisplayManager: dataDisplayManager, service: service, coordinator: coordinator)
-        let newsFeedView = NewsFeedView(viewModel: viewModel, dataDisplayManager: dataDisplayManager)
+        let newsFeedView = NewsFeedView(dataDisplayManager: dataDisplayManager)
         
         newsFeedView.output = viewModel
+        newsViewController.addDisposeBag(viewModel)
         newsViewController.newsFeedView = newsFeedView
         
         return newsViewController

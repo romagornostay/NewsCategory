@@ -7,15 +7,6 @@
 
 import Foundation
 
-// MARK: - APIResponse
-struct APIResponse: Decodable {
-    
-    let status: String
-    let totalResults: Int
-    let articles: [Article]
-    
-}
-
 // MARK: - Source
 struct Source: Decodable {
     

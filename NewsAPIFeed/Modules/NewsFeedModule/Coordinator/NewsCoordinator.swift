@@ -32,11 +32,5 @@ extension NewsCoordinator: NewsCoordinatorProtocol {
         newsDetailCoordinator.openDetailViewWith(index, articles: articles)
     }
     
-    func didOpenSafariConroller(withUrl url: URL) {
-        let safariViewController = SFSafariViewController(url: url)
-        safariViewController.modalPresentationStyle = .formSheet
-        navigationController?.viewControllers.first?.present(safariViewController, animated: true)
-    }
-    
 }
 

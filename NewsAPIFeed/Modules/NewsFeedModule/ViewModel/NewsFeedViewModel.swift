@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  NewsFeedViewModel.swift
 //  NewsAPIFeed
 //
 //  Created by Роман Горностаев on 09.09.2023.
@@ -7,49 +7,61 @@
 
 import Foundation
 
-protocol NewsFeedViewModelProtocol {
-    func getArticles()
+protocol NewsFeedViewModelProtocol: AnyObject {
     var articles: [Article]? { get set }
+    func loadNews()
 }
 
 final class NewsFeedViewModel: NewsFeedViewModelProtocol {
-
-    weak var dataDisplayManager: NewsFeedDataDisplayManager?
-    let networkService: NetworkServiceProtocol
+    
+    @MainActor weak var dataDisplayManager: NewsFeedDataDisplayManager?
+    let newsService: NewsServiceProtocol
     var coordinator: NewsCoordinatorProtocol?
     var articles: [Article]?
     
-    init(dataDisplayManager: NewsFeedDataDisplayManager, service: NetworkServiceProtocol, coordinator: NewsCoordinatorProtocol) {
+    init(dataDisplayManager: NewsFeedDataDisplayManager, service: NewsServiceProtocol, coordinator: NewsCoordinatorProtocol) {
         self.dataDisplayManager = dataDisplayManager
-        self.networkService = service
+        self.newsService = service
         self.coordinator = coordinator
     }
-    
-    func getArticles() {
-        dataDisplayManager?.setupState(.skeleton(NewsViewModel.tenViewModels))
-        networkService.getArticles(for: .health) { result in
-            switch result {
-            case .success(let articles):
-                self.articles = articles
-                let models = self.mapToCellViewModel(from: articles)
-                self.dataDisplayManager?.setupState(.result(models))
-            case .failure(_):
-                print("Sone Errors!!!")
-            }
-        }
-    }
-    
+
     private func mapToCellViewModel(from articles: [Article]?) -> [NewsViewModel] {
         guard let articles else { return [] }
         return articles.compactMap { NewsViewModel($0) }
     }
+    
+    // MARK: - Load news
+    func loadNews() {
+        Task {
+            await dataDisplayManager?.setupState(.skeleton(NewsViewModel.tenViewModels))
+            await proceedToLoadNews()
+        }
+    }
+    
+    private func proceedToLoadNews() async {
+        // TODO: - Loading news for diffrent categories with PageViewContriller like Airbnb
+        let result = await newsService.articles(for: .business)
+        
+        switch result {
+        case .success(let response):
+            await handleNewsLoading(response)
+        case .failure(let error):
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func handleNewsLoading(_ response: NewsResponse) async {
+        self.articles = response.articles
+        await dataDisplayManager?.setupState(.result(response.articles.compactMap { NewsViewModel($0) }))
+    }
+      
     
 }
 // MARK: - NewsFeedView outputs
 extension NewsFeedViewModel: NewsFeedViewOutput {
     
     func didTriggerLoadNews() {
-        getArticles()
+        loadNews()
     }
     
     func didTriggerCellSelected(atIndex index: Int) {
@@ -58,7 +70,7 @@ extension NewsFeedViewModel: NewsFeedViewOutput {
     }
     
     func didTriggerPullToRefresh() {
-        getArticles()
+        loadNews()
     }
     
 }

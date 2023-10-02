@@ -14,7 +14,6 @@ protocol NewsDetailCoordinatorProtocol: AnyObject {
 
 final class NewsDetailCoordinator: Coordinator {
     var navigationController: UINavigationController?
-    
     var assemblyBuilder: AssemblyBuilderProtocol?
     
     init(navigationController: UINavigationController?, assemblyBuilder: AssemblyBuilderProtocol?) {

@@ -17,16 +17,13 @@ protocol NewsFeedViewOutput: AnyObject {
 final class NewsFeedView: UIView {
     
     weak var output: NewsFeedViewOutput?
-    private let viewModel: NewsFeedViewModelProtocol
     private let dataDisplayManager: NewsFeedDataDisplayManager
     
     // MARK: - Subviews
     private let collectionView: UICollectionView
     private let refreshControl = UIRefreshControl()
     
-    // MARK: - Init
-    init(frame: CGRect = .zero, viewModel: NewsFeedViewModelProtocol, dataDisplayManager: NewsFeedDataDisplayManager) {
-        self.viewModel = viewModel
+    init(frame: CGRect = .zero, dataDisplayManager: NewsFeedDataDisplayManager) {
         self.dataDisplayManager = dataDisplayManager
         self.collectionView = UICollectionView(frame: frame, collectionViewLayout: dataDisplayManager.layout)
         super.init(frame: frame)
@@ -48,7 +45,6 @@ final class NewsFeedView: UIView {
     private func setupInitialState() {
         setupCollectionView()
         setupRefreshControl()
-//        setupEmptyStateView()
     }
     
     private func setupCollectionView() {
@@ -70,8 +66,10 @@ final class NewsFeedView: UIView {
     private func endRefreshing() {
         dataDisplayManager.onTopEndRefreshing = { [weak self] in
             guard let refreshControl = self?.refreshControl else { return }
-            if refreshControl.isRefreshing {
-                refreshControl.endRefreshing()
+            DispatchQueue.main.async {
+                if refreshControl.isRefreshing {
+                    refreshControl.endRefreshing()
+                }
             }
         }
     }
@@ -80,7 +78,6 @@ final class NewsFeedView: UIView {
         collectionView.frame = bounds
     }
     
-    // MARK: - Internal func
     func didTriggerViewReadyForLoadNews() {
         output?.didTriggerLoadNews()
     }

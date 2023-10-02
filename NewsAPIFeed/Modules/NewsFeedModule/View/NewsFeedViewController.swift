@@ -10,6 +10,8 @@ import UIKit
 class NewsFeedViewController: UIViewController {
     
     var newsFeedView: NewsFeedView?
+    /// disposeBag for ViewModel
+    private var disposeBag: Any?
     
     override func loadView() {
         title = "News"
@@ -20,6 +22,11 @@ class NewsFeedViewController: UIViewController {
         super.viewDidLoad()
         
         newsFeedView?.didTriggerViewReadyForLoadNews()
+    }
+    
+    // MARK: - disposeBag
+    func addDisposeBag(_ disposeBag: Any) {
+        self.disposeBag = disposeBag
     }
     
 }
