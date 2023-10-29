@@ -10,8 +10,8 @@ import UIKit
 struct NewsViewModel: Hashable {
     
     let id = UUID().uuidString
-    let title: String
-    let subtitle: String
+    var title: String
+    var subtitle: String
     var imageURL: URL?
     var imageData: Data?
     
@@ -36,6 +36,14 @@ extension NewsViewModel {
             array.append(model)
         }
         return array
+    }
+    
+    static var defaultModel: NewsViewModel {
+        var model = NewsViewModel()
+        model.title = "The Mortgage Market Is So Bad Lenders Want Ex-Employees to Give Back Their Bonuses"
+        model.subtitle = "The mortgage industry is notoriously feast or famine, but there’s no obvious way out of this bust"
+        model.imageURL = URL(string: "https://images.wsj.net/im-877315/social")
+        return model
     }
         
 }

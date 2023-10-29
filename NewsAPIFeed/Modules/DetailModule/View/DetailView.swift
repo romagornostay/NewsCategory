@@ -11,8 +11,9 @@ struct DetailView: View {
     @StateObject var viewModel: DetailViewModel
     
     var body: some View {
-        PageViewController(pages: viewModel.articles.map { ArticleView(article: $0).environmentObject(viewModel) },
-                           currentPage: $viewModel.newsIndex
+        PageViewController(
+            pages: viewModel.articles.map { ArticleView(article: $0).environmentObject(viewModel) },
+            currentPage: $viewModel.newsIndex
         )
         .edgesIgnoringSafeArea(.all)
     }
